@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Calendar;
 
+import com.android.datetimepicker.time.RadialPickerLayout;
 import com.github.espiandev.showcaseview.ShowcaseView;
 import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
 import com.github.espiandev.showcaseview.ShowcaseViews;
@@ -60,6 +61,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -481,10 +483,19 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		mTask.due = localTime.getTimeInMillis();
 		setDueText();
 
-		// Dont ask for time for due date
-		// final TimePickerDialogFragment picker = getTimePickerFragment();
-		// picker.setListener(this);
-		// picker.show(getFragmentManager(), "time");
+		// and ask for time
+        TimePickerDialog picker = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(final RadialPickerLayout view,
+                    final int hourOfDay, final int minute) {
+                localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                localTime.set(Calendar.MINUTE,  minute);
+
+                mTask.due = localTime.getTimeInMillis();
+                setDueText();
+            }
+        }, 12, 00, DateFormat.is24HourFormat(getActivity()));
+		 picker.show(getFragmentManager(), "time");
 	}
 
 	// @Override
@@ -498,8 +509,8 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			dueDateBox.setText("");
 		} else {
 			// Due date
-			dueDateBox.setText(TimeFormatter.getLocalDateOnlyStringLong(
-					getActivity(), mTask.due));
+			dueDateBox.setText(TimeFormatter.getLocalDateStringLong(
+                    getActivity(), mTask.due));
 		}
 	}
 
