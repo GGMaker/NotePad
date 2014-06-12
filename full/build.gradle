@@ -87,7 +87,7 @@ android {
     buildToolsVersion "19.1.0"
 
     defaultConfig {
-        packageName "com.nononsenseapps.notepad"
+        applicationId "com.nononsenseapps.notepad"
         versionCode 113
         versionName getVersionName()
 
@@ -136,5 +136,18 @@ android {
       }
     } else {
       println "No key store defined. Signed release not available..."
+    }
+
+    packagingOptions {
+      exclude 'META-INF/DEPENDENCIES.txt'
+      exclude 'META-INF/LICENSE.txt'
+      exclude 'META-INF/NOTICE.txt'
+      exclude 'META-INF/NOTICE'
+      exclude 'META-INF/LICENSE'
+      exclude 'META-INF/DEPENDENCIES'
+      exclude 'META-INF/notice.txt'
+      exclude 'META-INF/license.txt'
+      exclude 'META-INF/dependencies.txt'
+      exclude 'META-INF/LGPL2.1'
     }
 }
